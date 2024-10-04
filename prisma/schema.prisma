@@ -19,6 +19,8 @@ model Admin {
   email    String   @unique
   name     String
   password String
+  profilePhoto String?
+  refreshToken  String?
 }
 
 model Student {
@@ -28,6 +30,8 @@ model Student {
   password String
   createdAt DateTime @default(now())
   profile  String?  // Optional field for storing profile information
+  profilePhoto String?
+  refreshToken  String?
 }
 
 model Complaint {

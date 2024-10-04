@@ -11,7 +11,7 @@ const validate = (validator) => {
             });
         }
 
-        next(); // If there are no errors, continue to the next middleware or controller
+        next(); //  continue to the next middleware or controller
     };
 };
 

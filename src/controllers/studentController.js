@@ -20,6 +20,15 @@ const loginStudent = async (req, res) => {
   }
 };
 
+const refreshToken = async (req, res) => {
+  const { refreshToken } = req.body;
+  try {
+      const tokens = await studentService.refreshToken(refreshToken);
+      res.status(200).json(tokens);
+  } catch (error) {
+      res.status(401).json({ error: error.message });
+  }
+};
 const correctProfile = async (req, res) => {
   const { name } = req.body;
   const studentId = req.user.id;
@@ -31,4 +40,29 @@ const correctProfile = async (req, res) => {
   }
 };
 
-module.exports = { createStudent, loginStudent, correctProfile };
+const uploadProfilePhoto = async (req, res) => {
+  
+  console.log(`controller`);
+  //console.log(`${req.file.path}`);
+const studentId=req.user.id;// this thing works but when i pass const {studentID}=req.body  it give me error why?
+  console.log(`${studentId}`);
+  const profilePhoto=req.file.path;
+  try {
+      if (!req.file) {
+          return res.status(400).json({ message: 'No file uploaded' });
+      }
+
+      const updateprofilephoto= await studentService.uploadProfilephoto(studentId,profilePhoto);
+    
+    //   const updatedStudent = await prisma.student.update({
+    //     where: { id: req.user.id },
+    //     data: { profilePhoto: req.file.path } 
+    // });
+
+      res.status(200).json({ message: 'Profile photo uploaded successfully', data: updateprofilephoto });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+}
+
+module.exports = { createStudent, loginStudent, correctProfile, uploadProfilePhoto,refreshToken };

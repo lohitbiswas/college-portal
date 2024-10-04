@@ -20,6 +20,15 @@ const loginAdmin = async (req, res) => {
   }
 };
 
+const refresh_Token=async(req,res)=>{
+  const{refreshToken}=req.body
+  try{
+    const refreshT= await adminService.refresh_Token(refreshToken);
+    res.status(200).json(refreshT);
+  }catch(error){
+    res.status(401).json({error:error.message});
+  }
+}
 const getAllStudents = async (req, res) => {
   try {
     const students = await adminService.getAllStudents();
@@ -75,6 +84,24 @@ const getStudentbyId = async (req, res) => {
     }
   };
 
+  const uploadProfilePhoto=async (req,res)=>{
+    //const {id}=req.body;
+    const id=req.user.id
+    const profilePhoto= req.file.path;
+    console.log(`${id}`);
+    console.log(`${profilePhoto}`);
+    try{
+      if(!req.file){
+        return res.status(400).json({message:'No file is uploaded'})
+      }
+      const updateProfilePhoto= await adminService.updateProfilePhoto(id,profilePhoto);
+      res.status(200).json({ message: 'Profile photo uploaded successfully', data: updateProfilePhoto });
+    }
+    catch(error){
+      res.status(500).json({error: error.message})
+    }
+  }
 
 
-module.exports = { createAdmin, loginAdmin, getAllStudents , getStudentbyId, getstudentbyemail, updateStudent, updateStudentprofile};
+
+module.exports = { createAdmin, loginAdmin,refresh_Token, getAllStudents , getStudentbyId, getstudentbyemail, updateStudent, updateStudentprofile,uploadProfilePhoto};

@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
+const{ generateAccessToken,generateRefreshToken}=require('../utils/tokenUtils');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
@@ -19,9 +19,85 @@ const loginAdmin = async (email, password) => {
   const isPasswordMatch = await bcrypt.compare(password, admin.password);
   if (!isPasswordMatch) throw new Error('Invalid password');
 
-  const token = jwt.sign({ id: admin.id, email: admin.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  return { message: 'Login successful', token };
+  const accessToken=generateAccessToken(admin);
+  const refreshToken=generateRefreshToken(admin);
+
+  await prisma.admin.update({
+    where:{id:admin.id},
+    data:{refreshToken}
+  })
+  //const token = jwt.sign({ id: admin.id, email: admin.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  return { message: 'Login successful', admin:{id:admin.id}, accessToken, refreshToken};
 };
+
+const refresh_Token=async (Old_token)=>{
+ const decoded_admin=jwt.verify(Old_token,process.env.JWT_REFRESH_SECRET);
+
+console.log(`admin model:${decoded_admin}`);
+
+ const admin= await prisma.admin.findFirst({
+  where:{
+    id:decoded_admin.id,
+    refreshToken:Old_token
+  }
+});
+
+console.log(`Admin Model Name:${admin.name}`);
+if(!admin){
+  console.error(`Invalid refresh token`);
+}
+
+const newaccessToken=generateAccessToken(admin);
+const newrefreshToken=generateRefreshToken(admin);
+
+await prisma.admin.update({
+  where:{id:admin.id},
+  data:{refreshToken:newrefreshToken}
+})
+
+return {message:'Refresh and Access token renewed',admin:{name:admin.name},accessToken: newaccessToken, refreshToken: newrefreshToken};
+}
+
+// const refresh_Token = async (Old_token) => {
+//   try {
+//     const decoded_admin = jwt.verify(Old_token, process.env.JWT_REFRESH_SECRET);
+//     console.log(`Decoded admin: ${JSON.stringify(decoded_admin)}`);
+
+//     // Fetch admin with matching ID and refresh token
+//     const admin = await prisma.admin.findFirst({
+//       where: {
+//         id: decoded_admin.id,
+//         refreshToken: Old_token,
+//       },
+//     });
+
+//     console.log(`Admin found: ${admin ? admin.name : 'Not found'}`);
+
+//     if (!admin) {
+//       console.error('Invalid refresh token');
+//       return { error: 'Invalid refresh token' };
+//     }
+
+//     const newaccessToken = generateAccessToken(admin);
+//     const newrefreshToken = generateRefreshToken(admin);
+
+//     await prisma.admin.update({
+//       where: { id: admin.id },
+//       data: { refreshToken: newrefreshToken },
+//     });
+
+//     return {
+//       message: 'Refresh and Access token renewed',
+//       admin: { name: admin.name },
+//       accessToken: newaccessToken,
+//       refreshToken: newrefreshToken,
+//     };
+//   } catch (error) {
+//     console.error('Error in refreshing token:', error);
+//     return { error: 'Failed to refresh token' };
+//   }
+// };
+
 
 const getAllStudents = async () => {
   return await prisma.student.findMany();
@@ -86,5 +162,19 @@ const updateStudentProfile = async (id,profile) => {
     }
 };
   
+const updateProfilePhoto=async(id,profilephoto)=>{
+  console.log(`photo upload hit model`);
+  // console.log(`file-path is : ${profilePhoto}`);
+  console.log(`id is:${id}`);
+  try{
+    const updateUser=await prisma.admin.update({
+      where:{id:parseInt(id)},
+      data:{profilePhoto:profilephoto}
+    });
+    return updateUser;
+  }catch(error){
+    throw new Error('DataBase Query falied');
+  }
+}
 
-module.exports = { createAdmin, loginAdmin, getAllStudents ,getStudentbyId,getstudentbyemail,updateStudent,updateStudentProfile};
+module.exports = { createAdmin, loginAdmin,refresh_Token, getAllStudents ,getStudentbyId,getstudentbyemail,updateStudent,updateStudentProfile,updateProfilePhoto};
