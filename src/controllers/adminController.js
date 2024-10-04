@@ -102,6 +102,17 @@ const getStudentbyId = async (req, res) => {
     }
   }
 
+const deleteStudent=async(req,res)=>{
+  console.log(`delete controller`);
+  const {id}=req.params;
+  console.log(`delete controller id:${id}`);
+  try{
+    const deleteStu=await adminService.deleteStudent(id);
+    res.status(200).json(deleteStu);
+  }
+  catch(error){
+    res.status(500).json({error:error.message})
+  }
+}
 
-
-module.exports = { createAdmin, loginAdmin,refresh_Token, getAllStudents , getStudentbyId, getstudentbyemail, updateStudent, updateStudentprofile,uploadProfilePhoto};
+module.exports = { createAdmin, loginAdmin,refresh_Token, getAllStudents , getStudentbyId, getstudentbyemail, updateStudent, updateStudentprofile,uploadProfilePhoto,deleteStudent};

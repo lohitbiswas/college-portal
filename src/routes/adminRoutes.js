@@ -19,4 +19,6 @@ router.get('/get-student-by-email/:email', authMiddleware, adminController.getst
 router.put('/update/:id',authMiddleware,adminController.updateStudent);
 router.put('/updateProfile/:id',authMiddleware,adminController.updateStudentprofile);
 
+router.delete('/delete-student/:id',adminController.deleteStudent);
+
 module.exports = router;

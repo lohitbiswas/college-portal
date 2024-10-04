@@ -38,4 +38,9 @@ const updateProfilePhoto=async (id, profilePhoto)=>{
   console.log(`photo upload hit service: ${profilePhoto}`);
   return await adminModel.updateProfilePhoto(id,profilePhoto); 
 }
-module.exports = { createAdmin, loginAdmin,refresh_Token, getAllStudents,getStudentbyId,getstudentbyemail ,updateStudent,updateStudentProfile, updateProfilePhoto};
+
+const deleteStudent=async(id)=>{
+  console.log(`delete service id:${id}`);
+  return await adminModel.deleteStudent(id);
+}
+module.exports = { createAdmin, loginAdmin,refresh_Token, getAllStudents,getStudentbyId,getstudentbyemail ,updateStudent,updateStudentProfile, updateProfilePhoto,deleteStudent};

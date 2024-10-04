@@ -177,4 +177,19 @@ const updateProfilePhoto=async(id,profilephoto)=>{
   }
 }
 
-module.exports = { createAdmin, loginAdmin,refresh_Token, getAllStudents ,getStudentbyId,getstudentbyemail,updateStudent,updateStudentProfile,updateProfilePhoto};
+
+const deleteStudent=async(id)=>{
+  console.log(`deleted the student with id:${id}`);
+  try{
+    const deleteStu= await prisma.student.delete({
+      where:{id:parseInt(id)}
+    });
+    return deleteStu;
+  }
+  catch(error){
+    throw new Error('this id is invlid');
+  }
+
+}
+
+module.exports = { createAdmin, loginAdmin,refresh_Token, getAllStudents ,getStudentbyId,getstudentbyemail,updateStudent,updateStudentProfile,updateProfilePhoto,deleteStudent};
