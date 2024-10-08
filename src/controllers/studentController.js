@@ -1,9 +1,11 @@
 const studentService = require('../services/studentService');
+const {sendMail}=require('../services/emailService');
 
 const createStudent = async (req, res) => {
   const { email, name, password } = req.body;
   try {
     const newStudent = await studentService.createStudent(email, name, password);
+    sendMail(email, name);
     res.status(201).json(newStudent);
   } catch (error) {
     res.status(500).json({ error: error.message });
