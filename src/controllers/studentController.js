@@ -42,10 +42,10 @@ const correctProfile = async (req, res) => {
 
 const uploadProfilePhoto = async (req, res) => {
   
-  console.log(`controller`);
+  console.log(`controller`, req.body);
   //console.log(`${req.file.path}`);
 const studentId=req.user.id;// this thing works but when i pass const {studentID}=req.body  it give me error why?
-  console.log(`${studentId}`);
+  // console.log(`${JSON.stringify(req.body)}`);
   const profilePhoto=req.file.path;
   try {
       if (!req.file) {
