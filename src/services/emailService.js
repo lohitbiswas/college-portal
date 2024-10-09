@@ -28,4 +28,24 @@ const sendMail = (email, name) => {
   });
 };
 
-module.exports = { sendMail };
+const sendMailfromAdminEND = (email) => {
+    const mailOptions = {
+      from: 'lohitkrbiswas.2001@gmail.com', 
+      to: email, 
+      subject: 'Profile Updated',
+      text: `Hi user , your profile has been approved now!`, 
+    };
+  
+    
+    transporter.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        console.log("emailService");
+        console.log(err);
+        
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+  };
+
+module.exports = { sendMail,sendMailfromAdminEND };

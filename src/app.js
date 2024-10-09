@@ -9,7 +9,7 @@ const morgan =require('morgan');
 
 app.use(express.json()); 
 app.use(cors()); 
-app.use(morgan);
+// app.use(morgan);
 // app.use(bodyParser.json()); 
 // app.use(bodyParser.urlencoded({ extended: true }));
 

@@ -1,4 +1,5 @@
 const adminService = require('../services/adminService');
+const {sendMailfromAdminEND}=require('../services/emailService')
 
 const createAdmin = async (req, res) => {
   const { email, name, password } = req.body;
@@ -66,6 +67,7 @@ const getStudentbyId = async (req, res) => {
     console.log(`Querying for user with email: ${id}`);
     try {
       const students = await adminService.updateStudent(id,email);
+      
       res.status(200).json(students);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -75,9 +77,18 @@ const getStudentbyId = async (req, res) => {
   const updateStudentprofile = async (req, res) => {
     const{ id}=req.params;
     const { profile } = req.body;
+    
     console.log(`Querying for user with profileID: ${id}`);
     try {
+
+      const studentEmail= await adminService.getStudentbyId(id);
+      if (!studentEmail) {
+        return res.status(404).json({ error: 'Student not found' });
+      }
+
       const students = await adminService.updateStudentProfile(id,profile);
+      sendMailfromAdminEND(studentEmail.email);
+      console.log(`verification msg send to ${studentEmail.email}`);
       res.status(200).json(students);
     } catch (error) {
       res.status(500).json({ error: error.message });
