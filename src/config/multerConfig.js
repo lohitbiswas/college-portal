@@ -1,7 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 
-// Configure storage options
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/'); // The directory where files will be saved
@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
     }
 });
 
-// File filter to accept images only
+
 const fileFilter = (req, file, cb) => {
     const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     if (allowedMimeTypes.includes(file.mimetype)) {
