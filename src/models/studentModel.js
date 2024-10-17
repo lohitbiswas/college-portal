@@ -30,6 +30,83 @@ const loginStudent = async (email, password) => {
 });
   return { message: 'Login successful', student: { id: student.id }, accessToken ,refreshToken};
 };
+// Auth 2.0
+// const googleLogin = async (googleId, email, name) => {
+//   let student = await prisma.student.findFirst({ where: { email } });
+
+
+//   if (!student) {
+//     student = await prisma.student.create({
+//       data: { email, name, googleId }, 
+//     });
+//   }
+
+//   const accessToken = generateAccessToken(student);
+//   const refreshToken = generateRefreshToken(student);
+
+//   await prisma.student.update({
+//     where: { id: student.id },
+//     data: { refreshToken }
+//   });
+
+//   return { message: 'Login successful via Google', student: { id: student.id }, accessToken, refreshToken };
+// };
+
+const findStudentByEmailOrGoogleId = async (email, googleId) => {
+  try{
+  return await prisma.student.findFirst({
+      where: {
+          OR: [
+              { googleId },
+              { email }
+          ]
+      }
+  });
+}
+  catch{
+    console.error('Error finding student:',error);
+    throw new Error('Failed to find a  student');
+  }
+};
+
+const createStudentWithGoogle = async (email, name, googleId, profilePhoto) => {
+  try{
+    const filename = profilePhoto.split('/').pop().split('?')[0];
+
+ 
+    const combinedPassword = `${filename}${email}`;
+
+  
+  const hashedPassword = await bcrypt.hash(combinedPassword, 10); 
+  return await prisma.student.create({
+      data: {
+          googleId,
+          email,
+          name,
+          profilePhoto,
+          password:hashedPassword
+      }
+  });
+}
+  catch{
+    console.error('Error creating student:',error);
+    throw new Error('Failed to create a  student');
+}
+};
+
+const updateRefreshTokenWithGoogle = async (studentId, refreshToken) => {
+  try{
+  await prisma.student.update({
+      where: { id: studentId },
+      data: { refreshToken }
+  });
+}
+catch{
+  console.error('Error updating student:',error);
+  throw new Error('Failed to update a  student');
+}
+};
+
 
 const refreshToken = async (oldRefreshToken) => {
 
@@ -76,4 +153,4 @@ const uploadProfilephoto = async (studentId, profilePhoto) => {
   return student;
 };
 
-module.exports = { createStudent, loginStudent, refreshToken, correctProfile ,uploadProfilephoto};
+module.exports = { createStudent, loginStudent,findStudentByEmailOrGoogleId, createStudentWithGoogle, updateRefreshTokenWithGoogle, refreshToken, correctProfile ,uploadProfilephoto};
