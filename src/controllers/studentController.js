@@ -22,6 +22,34 @@ const loginStudent = async (req, res) => {
   }
 };
 
+// const googleLogin = async (req, res) => {
+//   const { id: googleId, emails: [{ value: email }], displayName: name } = req.user;
+
+//   try {
+//       const response = await studentService.googleLogin(googleId, email, name);
+//       res.status(200).json(response);
+//   } catch (error) {
+//       res.status(500).json({ error: error.message });
+//   }
+// };
+
+const googleLogin = async (req, res) => {
+  const { id: googleId, emails: [{ value: email }], displayName: name, photos } = req.user;
+  const profilePhoto = photos?.[0]?.value || null;
+
+  if(!googleId || !email || !name){
+    return res.status(400).json({error:'Missing details'})
+  }
+  try {
+      const response = await studentService.googleLogin(googleId, email, name, profilePhoto);
+      res.status(200).json(response);
+  } catch (error) {
+    console.error("Error  is google log-in",error);
+      res.status(500).json({ error: error.message });
+  }
+};
+
+
 const refreshToken = async (req, res) => {
   const { refreshToken } = req.body;
   try {
@@ -67,4 +95,4 @@ const studentId=req.user.id;// this thing works but when i pass const {studentID
   }
 }
 
-module.exports = { createStudent, loginStudent, correctProfile, uploadProfilePhoto,refreshToken };
+module.exports = { createStudent, loginStudent,googleLogin, correctProfile, uploadProfilePhoto,refreshToken };

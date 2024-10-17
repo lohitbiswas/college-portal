@@ -32,6 +32,7 @@ model Student {
   profile  String?  // Optional field for storing profile information
   profilePhoto String?
   refreshToken  String?
+  googleId    String?  @unique 
 }
 
 model Complaint {
