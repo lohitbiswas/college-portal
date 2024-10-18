@@ -2,7 +2,7 @@ const express = require('express');
 const studentController = require('../controllers/studentController');
 const { createStudentValidator, loginStudentValidator } = require('../validators/studentValidator');
 const validate = require('../middlewares/validate');
-const authMiddleware = require('../middlewares/authMiddleware');
+const authMiddleware = require('../middlewares/authmiddleware');
 const upload = require('../config/multerConfig');
 const passport = require('passport');
 

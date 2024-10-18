@@ -1,6 +1,6 @@
 const express = require('express');
 const complaintController = require('../controllers/complaintController');
-const authMiddleware = require('../middlewares/authMiddleware');
+const authMiddleware = require('../middlewares/authmiddleware');
 const router = express.Router();
 
 // Student registers a complaint 

@@ -2,7 +2,7 @@ const express = require('express');
 const adminController = require('../controllers/adminController');
 const { createAdminValidator, loginAdminValidator } = require('../validators/adminValidator');
 const validate = require('../middlewares/validate');
-const authMiddleware = require('../middlewares/authMiddleware');
+const authMiddleware = require('../middlewares/authmiddleware');
 const upload = require('../config/multerConfig');
 
 const router = express.Router();
