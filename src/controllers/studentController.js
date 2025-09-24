@@ -1,10 +1,12 @@
 const studentService = require('../services/studentService');
 const {sendMail}=require('../services/emailService');
+const redisClient = require('../config/redisConfig');
 
 const createStudent = async (req, res) => {
   const { email, name, password } = req.body;
   try {
     const newStudent = await studentService.createStudent(email, name, password);
+    redisClient.set(`student:${newStudent.id}`, JSON.stringify(newStudent));
     sendMail(email, name);
     res.status(201).json(newStudent);
   } catch (error) {
@@ -64,6 +66,7 @@ const correctProfile = async (req, res) => {
   const studentId = req.user.id;
   try {
     const updatedProfile = await studentService.correctProfile(studentId, name);
+    redisClient.set(`student:${studentId}`, JSON.stringify(updatedProfile));
     res.status(200).json(updatedProfile);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -83,6 +86,8 @@ const studentId=req.user.id;// this thing works but when i pass const {studentID
       }
 
       const updateprofilephoto= await studentService.uploadProfilephoto(studentId,profilePhoto);
+      redisClient.set(`student:${studentId}`, JSON.stringify(updateprofilephoto));
+
     
     //   const updatedStudent = await prisma.student.update({
     //     where: { id: req.user.id },

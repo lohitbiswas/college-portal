@@ -5,13 +5,14 @@ const port = process.env.PORT || 5000;; // Replace with your desired port
 const mysql = require('mysql2');
 const cors = require('cors');
 const session = require('express-session');
-// const morgan =require('morgan');
+
+
+// const http=require('http');
+// const server = http.createServer(app);
 
 
 const passport = require('passport');
 // const bodyparser=require('body-parser');
-
-
 //app.use(session({ secret: 'your_session_secret', resave: false, saveUninitialized: true })); //this doent work for https only work for http
 
 app.use(express.json()); 
@@ -47,7 +48,7 @@ app.use((err, req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-    res.send(`Server is running on ${port}`);
+    res.send(`Server is running on with socket ${port}`);
   });
 
 

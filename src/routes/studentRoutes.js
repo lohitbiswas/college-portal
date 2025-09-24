@@ -5,6 +5,7 @@ const validate = require('../middlewares/validate');
 const authMiddleware = require('../middlewares/authmiddleware');
 const upload = require('../config/multerConfig');
 const passport = require('passport');
+const cacheMiddleware=require('../middlewares/cachemiddleware');
 
 
 const router = express.Router();
@@ -34,7 +35,7 @@ router.get('/auth/google/callback',
 router.post('/refresh-token', studentController.refreshToken);
 router.get('/profile', authMiddleware, (req, res) => {
     res.json({ message: `Welcome to your profile, ${req.user.email}!` });
-});
+},cacheMiddleware('student'));
 router.put('/profile/:id', authMiddleware, studentController.correctProfile);
 
 module.exports = router;
