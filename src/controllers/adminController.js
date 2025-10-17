@@ -1,3 +1,13 @@
+// Controller to check student attendance
+const checkStudentAttendance = async (req, res) => {
+  const { studentId } = req.params;
+  try {
+    const attendance = await adminService.checkStudentAttendance(studentId);
+    res.status(200).json(attendance);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 const adminService = require('../services/adminService');
 const {sendMailfromAdminEND}=require('../services/emailService')
 

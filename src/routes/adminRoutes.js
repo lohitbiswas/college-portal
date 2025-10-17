@@ -1,3 +1,5 @@
+// Route to check student attendance
+router.get('/check-attendance/:studentId', authMiddleware, adminController.checkStudentAttendance);
 const express = require('express');
 const adminController = require('../controllers/adminController');
 const { createAdminValidator, loginAdminValidator } = require('../validators/adminValidator');

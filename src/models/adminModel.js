@@ -11,6 +11,14 @@ const createAdmin = async (email, name, password) => {
   return await prisma.admin.create({
     data: { email, name, password: hashedPassword },
   });
+  // Fetch attendance for a student by ID
+  const getStudentAttendance = async (studentId) => {
+    // Assuming attendance is stored in a table called 'attendance' with studentId and status/date
+    return await prisma.attendance.findMany({
+      where: { studentId },
+      orderBy: { date: 'desc' }
+    });
+  };
 };
 
 const loginAdmin = async (email, password) => {
@@ -192,4 +200,4 @@ const deleteStudent=async(id)=>{
 
 }
 
-module.exports = { createAdmin, loginAdmin,refresh_Token, getAllStudents ,getStudentbyId,getstudentbyemail,updateStudent,updateStudentProfile,updateProfilePhoto,deleteStudent};
+module.exports = { createAdmin, loginAdmin, refresh_Token, getAllStudents, getStudentbyId, getstudentbyemail, updateStudent, updateStudentProfile, updateProfilePhoto, deleteStudent, getStudentAttendance };

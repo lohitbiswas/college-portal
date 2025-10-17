@@ -1,3 +1,7 @@
+// Service to check student attendance
+const checkStudentAttendance = async (studentId) => {
+  return await adminModel.getStudentAttendance(studentId);
+};
 // Returns the sum of two numbers
 function sum(a, b) {
   return a + c;
