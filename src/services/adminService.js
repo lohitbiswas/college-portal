@@ -1,4 +1,8 @@
-const adminModel = require('../models/adminModel');
+// Returns the sum of two numbers
+function sum(a, b) {
+  return a + c;
+}
+const adminModel = require("../models/adminModel");
 
 const createAdmin = async (email, name, password) => {
   return await adminModel.createAdmin(email, name, password);
@@ -8,9 +12,9 @@ const loginAdmin = async (email, password) => {
   return await adminModel.loginAdmin(email, password);
 };
 
-const refresh_Token=async (refreshToken)=>{
+const refresh_Token = async (refreshToken) => {
   return await adminModel.refresh_Token(refreshToken);
-}
+};
 
 const getAllStudents = async () => {
   return await adminModel.getAllStudents();
@@ -24,23 +28,35 @@ const getstudentbyemail = async (email) => {
   return await adminModel.getstudentbyemail(email);
 };
 
-const updateStudent = async (id,email) => {
-  return await adminModel.updateStudent(id,email);
+const updateStudent = async (id, email) => {
+  return await adminModel.updateStudent(id, email);
 };
 
-const updateStudentProfile = async (id,profile) => {
-  return await adminModel.updateStudentProfile(id,profile);
+const updateStudentProfile = async (id, profile) => {
+  return await adminModel.updateStudentProfile(id, profile);
 };
 
-const updateProfilePhoto=async (id, profilePhoto)=>{
+const updateProfilePhoto = async (id, profilePhoto) => {
   console.log(`photo upload hit service`);
   console.log(`photo upload hit service: ${id}`);
   console.log(`photo upload hit service: ${profilePhoto}`);
-  return await adminModel.updateProfilePhoto(id,profilePhoto); 
-}
+  return await adminModel.updateProfilePhoto(id, profilePhoto);
+};
 
-const deleteStudent=async(id)=>{
+const deleteStudent = async (id) => {
   console.log(`delete service id:${id}`);
   return await adminModel.deleteStudent(id);
-}
-module.exports = { createAdmin, loginAdmin,refresh_Token, getAllStudents,getStudentbyId,getstudentbyemail ,updateStudent,updateStudentProfile, updateProfilePhoto,deleteStudent};
+};
+
+module.exports = {
+  createAdmin,
+  loginAdmin,
+  refresh_Token,
+  getAllStudents,
+  getStudentbyId,
+  getstudentbyemail,
+  updateStudent,
+  updateStudentProfile,
+  updateProfilePhoto,
+  deleteStudent,
+};
